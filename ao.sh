@@ -142,6 +142,27 @@ while [[ $1 ]]; do case $1 in
 		group_ftype pdf pgn dht docx ipynb pptx
 	;;
 
+	plot )
+		shift
+		case $1 in
+			hist )
+				shift
+				fn=ao_plot_data.json.temp
+				q="'$1'"
+				echo "Running query $q"
+				echo "$q"
+				cat $dbfile | jq "($1)" > $fn
+				head -n10 $fn
+				"python3.9" -c $'import matplotlib.pyplot as plt\nimport json\nwith open("ao_plot_data.json.temp") as fp:\n\tplt.hist(json.load(fp), bins=50);plt.show()'
+#				"python3.9" - << EOF
+#					import matplotlib.pyplot as plt
+#					with open('$fn') as fp:
+#						plt.hist(json.load(fp))
+#EOF
+			;;
+		esac
+	;;
+
 	# Extract data from files to build databases
 	process )
 		shift
