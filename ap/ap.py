@@ -22,6 +22,7 @@ import hashlib
 from PIL import Image
 from PIL import UnidentifiedImageError
 import pytesseract
+import imagesize
 
 dbpath = '/home/alex/Desktop/ap.pickle'
 timelimit = 20
@@ -294,6 +295,13 @@ def tagfile(fnode, types, tag):
         fnode.ext.lower()[1:] in types.split() and
         'image' not in fnode.tags):
         fnode.tags.append('image')
+
+def filemeta(n=0):
+    for anode in data['files'][:n]:
+        if hasattr(anode, 'tags') and 'image' in anode.tags and (not hasattr(anode, 'dims') or anode.dims is None):
+            try: anode.dims = imagesize.get(anode.path)
+            except Exception as ex: print(ex)
+
 
 def tagfiles(n=0):
     log('Tagging files')
