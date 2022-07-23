@@ -14,6 +14,9 @@ import textwrap
 import psutil
 import hashlib
 
+import requests
+from bs4 import BeautifulSoup
+
 dbpath = '/home/alex/Desktop/ap.pickle'
 timelimit = 20
 
@@ -233,3 +236,23 @@ acinp('system_info', node(data=psutil.sensors_fans()))
 acinp('system_info', node(data=psutil.sensors_battery()))
 
 save()
+
+class websnapshot:
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+def crawl(targets, limit=1000):
+    if 'webdata' not in data: data['webdata'] = []
+    for i, t in enumerate(filter(lambda x: x.out_links is None, data['webdata'])):
+        log(f'Fetching {t.url}')
+        content = requests.get(t.url).text
+        soup = BeautifulSoup(content, 'html.parser')
+        #link.get('href') for link in soup.find_all('a')
+        #data['webdata'].extend()
+        for link in soup.find_all('a'):
+            newnode = websnapshot(url=link.get('href'), out_links=None, time=time.time())
+            t.out_links.append(newnode)
+            data['webdata'].append(newnode)
+        if i >= limit: break
+    save()
