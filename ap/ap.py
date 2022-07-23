@@ -10,9 +10,13 @@ import itertools
 
 import warnings
 import textwrap
+from termcolor import colored
 
 import psutil
 import hashlib
+
+import random
+import numpy as np
 
 dbpath = '/home/alex/Desktop/ap.pickle'
 timelimit = 20
@@ -214,6 +218,24 @@ def catalog(path='.', limit=1000, i=0, recursive=True, level=0, delay=0.01) -> i
             break
         time.sleep(delay)
     return i
+
+colors = 'red yellow green cyan blue magenta'.split()
+glyphs = ' △□▢▤▥▦▣▩■▲◇◈◆░▒▓█'
+def flower(size=15, g=1, h=3):
+    output = [[0 for x in range(size)] for y in range(size)]
+    def flowerr(x, y, i):
+        if 0<=x<size and 0<=y<size: output[x][y] += 1; # += i
+        if i<5:
+            for j in range(random.randint(0, h)):
+                flowerr(x+random.randint(-g,g), y+random.randint(-g,g), i+1)
+    flowerr(size//2, size//2, 0)
+    fmax = int(np.max(output))
+    L = len(glyphs)
+    #output = '\n'.join(''.join(2*(' ' if x == 0 else glyphs[L-int(x/fmax*L)-1]) for x in y) for y in output)
+    output = '\n'.join(''.join(2*(' ' if x == 0 else glyphs[int(x/fmax*L)-1]) for x in y) for y in output)
+    print(output)
+
+# TODO: add shebangs
 
 log('Getting system information')
 
