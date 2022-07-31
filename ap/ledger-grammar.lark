@@ -1,0 +1,9 @@
+?start: ("\n" | tree)+
+
+tree: (list | pair | info | comment | expression) _NL [_INDENT tree+ _DEDENT]
+
+%import common.CNAME -> NAME
+%import common.WS_INLINE
+%declare _INDENT _DEDENT
+//%ignore WS_INLINE
+%ignore /\t/+
