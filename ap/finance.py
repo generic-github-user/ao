@@ -47,6 +47,19 @@ class Node:
     def text(self):
         return ''.join(c.text() for c in self.children)
 
+    def find(self, value, recursive=True):
+        #if isinstance(value, callable):
+        if callable(value):
+            result = [c for c in self.children if value(c)]
+        else:
+            result = [c for c in self.children if c == value]
+
+        if recursive:
+            #for c in self.children if isinstance(c, Node):
+            for c in self.children:
+                if isinstance(c, Node):
+                    result.extend(c.find(value))
+        return result
     def __str__(self):
         return f'Node <{self.type}> ({self.depth})' + '\n' + '\n'.join('  '*self.depth + str(n) for n in self.children)
 
