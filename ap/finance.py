@@ -63,6 +63,18 @@ class Node:
     def __str__(self):
         return f'Node <{self.type}> ({self.depth})' + '\n' + '\n'.join('  '*self.depth + str(n) for n in self.children)
 
+
+class Transaction(Node):
+    def __init__(self, source: lark.Tree, *args, **kwargs):
+        super().__init__(source, *args, **kwargs)
+        self.amount = self[0]
+        for attr in 'status omitted'.split():
+            matches = list(filter(lambda x: isinstance(x[0], Pair), x[0].key == attr, self.children))
+            if matches:
+                setattr(self, attr, matches[0][0].value)
+
+    #def __str__(self):
+        #return f'Transaction\n'+'\n'.join('  '*self.depth + )
 with open('ledger-grammar.lark', 'r') as grammar:
     parser = Lark(grammar.read(), parser='lalr', lexer='contextual', postlex=TreeIndenter())
     #parser = Lark(grammar.read(), parser='earley', lexer='basic', postlex=TreeIndenter())
