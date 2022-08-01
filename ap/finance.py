@@ -1,3 +1,11 @@
+# This script contains financial tools for tracking my assets and guiding
+# decision-making. It is meant to be sufficiently general to support many types
+# of currencies, accounts, and transactions. Its main features include an
+# efficient and extensible Lark-based parser for human-readable ledgers,
+# convenience classes for scripting and analysis, and intuitive rule-based
+# automation for tagging, organization, etc. It will eventually provide
+# extensive tooling for data processing, plotting, and related tasks.
+
 import lark
 from lark import Lark
 from lark.indenter import Indenter
