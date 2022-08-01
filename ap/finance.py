@@ -13,9 +13,9 @@ class TreeIndenter(Indenter):
     tab_len = 2
 
 class Token:
-    def __init__(self, source, parent=None):
-        self.parent = parent
-        self.source = source
+    def __init__(self, source: lark.Token, parent=None):
+        self.parent: Node = parent
+        self.source: lark.Token = source
         for attr in 'type value line column'.split():
             setattr(self, attr, getattr(self.source, attr))
             self.length = len(self.source)
@@ -25,16 +25,20 @@ class Token:
     def __str__(self):
         return f'Token <{self.type}, {self.line}:{self.column}> {self.value}'
 
+
 class Node:
-    def __init__(self, source, parent=None, depth=0, root=None):
-        self.parent = parent
+    def __init__(self, source: lark.Tree, parent=None, depth=0, root=None):
+        self.parent: Node = parent
         self.root = root if root else self
         self.children = []
         self.source = source
+        self.value = None
 
         self.meta = self.source.meta
         self.type = self.source.data
         self.depth = depth
+
+
         for c in self.source.children:
             #print(c)
             if isinstance(c, lark.Tree): self.children.append(
@@ -81,7 +85,7 @@ with open('ledger-grammar.lark', 'r') as grammar:
 
 with open(ledger, 'r') as f:
     parsed = parser.parse(f.read())
-print(parsed.pretty()[:20000])
+print(parsed.pretty()[:2000])
 tree = Node(parsed)
 print(tree)
 
