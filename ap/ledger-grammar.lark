@@ -7,3 +7,23 @@ tree: (list | pair | info | comment | expression) _NL [_INDENT tree+ _DEDENT]
 %declare _INDENT _DEDENT
 //%ignore WS_INLINE
 %ignore /\t/+
+
+%import common.DIGIT
+//%import common.WORD
+%import common.NUMBER
+%import common.LETTER
+
+//%import common.FLOAT
+//%import common.INT
+
+_NL: /(\r?\n[\t ]*)+/
+
+INT.0: DIGIT+
+SIGNED_INT: ["+"|"-"] INT
+DECIMAL: INT "." INT? | "." INT
+
+_EXP: ("e"|"E") SIGNED_INT
+FLOAT: INT _EXP | DECIMAL _EXP?
+SIGNED_FLOAT: ["+"|"-"] FLOAT
+
+WORD.0: LETTER+
