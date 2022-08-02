@@ -87,6 +87,22 @@ class Transaction(Node):
 
     #def __str__(self):
         #return f'Transaction\n'+'\n'.join('  '*self.depth + )
+class Route(Node):
+    def __init__(self, source: lark.Tree, *args, **kwargs):
+        super().__init__(source, *args, **kwargs)
+        self.origin, self.dest = self.children
+
+    def __str__(self):
+        return f'Node <{self.type}> ({self.depth}) ~ {self.text()}' + '\n' + '\n'.join('  '*self.depth + str(n) for n in self.children)
+
+class Pair(Node):
+    def __init__(self, source: lark.Tree, *args, **kwargs):
+        super().__init__(source, *args, **kwargs)
+        self.key, self.value = self.children
+
+    #def __str__(self):
+        #return f'{self.key}: {self.value}'
+
 with open('ledger-grammar.lark', 'r') as grammar:
     parser = Lark(grammar.read(), parser='lalr', lexer='contextual', postlex=TreeIndenter())
     #parser = Lark(grammar.read(), parser='earley', lexer='basic', postlex=TreeIndenter())
