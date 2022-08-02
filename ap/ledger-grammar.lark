@@ -32,3 +32,16 @@ YEAR: DIGIT~4
 DATE.5: (DIGIT~1..2 ("/" | "-"))~2 ((DIGIT~2) | YEAR)
 TIME.5: DIGIT~1..2 [":" DIGIT~2] ("am" | "pm")
 range: TIME ("-" | " - ") TIME
+
+WORDLIKE.0: WORD | (WORD ("-" | "'") WORD)
+PAREN: "(" WORD (" " WORD)* ")"
+IDENTIFIER.1: WORDLIKE (" " (WORDLIKE | PAREN))* | "?" | "__"
+//identifier: WORD (" " WORD)*
+route: IDENTIFIER " "? "->" " "? IDENTIFIER
+
+num.1: FLOAT | INT
+usd.0: "$" num
+
+PUNCTUATION: ";" | "," | "." | "_" | "-" | "/" | "'" | "(" | ")"
+//any: /.+/
+any: LETTER | DIGIT | PUNCTUATION
