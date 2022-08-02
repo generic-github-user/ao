@@ -76,6 +76,8 @@ class Node:
         return f'Node <{self.type}> ({self.depth})' + '\n' + '\n'.join('  '*self.depth + str(n) for n in self.children)
 
 
+# Represents an event via which money moves from one account or entity to
+# another
 class Transaction(Node):
     def __init__(self, source: lark.Tree, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
@@ -87,6 +89,10 @@ class Transaction(Node):
 
     #def __str__(self):
         #return f'Transaction\n'+'\n'.join('  '*self.depth + )
+
+# Represents a simple path or directed edge between identifiers; typically used
+# in transaction entries to show assets moving from one entity/account to
+# another
 class Route(Node):
     def __init__(self, source: lark.Tree, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
@@ -95,6 +101,8 @@ class Route(Node):
     def __str__(self):
         return f'Node <{self.type}> ({self.depth}) ~ {self.text()}' + '\n' + '\n'.join('  '*self.depth + str(n) for n in self.children)
 
+# Represents a key-value pair, similar to a Python dictionary or JSON object;
+# used to store various metadata for ledger entries
 class Pair(Node):
     def __init__(self, source: lark.Tree, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
